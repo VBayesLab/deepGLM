@@ -28,7 +28,6 @@ mdl = deepGLMfit(X,y,...
                  'BatchSize',size(X,1),...   % Use entire training data as mini-batch
                  'MaxEpoch',10000,...
                  'Patience',50,...           % Higher patience values could lead to overfitting
-                 'Lowerbound',lb,...         % Use lowerbound as early stopping condition and model selection
                  'Seed',100);
 %% Plot training output    
 % Plot lowerbound
