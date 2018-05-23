@@ -29,9 +29,7 @@ nn = [2,2,2];
 % User can specify validation data to deepGLM by using 'Xval' and 'yval'
 % options. 
 mdl = deepGLMfit(X,y,...
-              'Dist','poisson',...
-              'Xval',X_validation,...
-              'yval',y_validation,...
+              'Distribution','poisson',...
               'Network',nn,...
               'Lrate',0.001,...
               'Seed',1000,...
@@ -39,29 +37,22 @@ mdl = deepGLMfit(X,y,...
               'Verbose',10,...
               'MaxEpoch',10000);
 
-%% Plot training output          
-% Plot PPS loss on validation data
+%% Plot training output    
+% Plot lowerbound
 figure
-plot(mdl.out.pps,'LineWidth',2)
-title('PPS Loss on Validation Set')
-xlabel('Iterations')
-ylabel('PPS')
-grid on
-
-% Plot MSE loss on validation data
-figure
-plot(mdl.out.mse,'LineWidth',2)
-title('Prediction Mean Square Error on Validation Set')
-xlabel('Iterations')
-ylabel('Mean Square Error')
+plot(mdl.out.lbBar,'LineWidth',2)
+title('Lowerbound of Variational Approximation','FontSize',20)
+xlabel('Iterations','FontSize',14,'FontWeight','bold')
+ylabel('Lowerbound','FontSize',14,'FontWeight','bold')
 grid on
 
 % Plot shrinkage coefficients
 figure
 deepGLMplot('Shrinkage',mdl.out.shrinkage,...
-            'Title','Shrinkage Coefficients for Schooling Data',...
+            'Title','Shrinkage Coefficients',...
             'Xlabel','Iterations',...
             'LineWidth',2);
+
 
 %% Prediction on test data
 % Make prediction (point estimation) on a test set

@@ -1,13 +1,14 @@
 % Examples demonstate how to use deepGLM function to fit data with binomial 
 % dependent variable
 %
-%   Copyright 2018 Minh-Ngoc Tran (minh-ngoc.tran@sydney.edu.au) and Nghia
-%   Nguyen (nghia.nguyen@sydney.edu.au)
+% Copyright 2018 
+%                Nghia Nguyen (nghia.nguyen@sydney.edu.au)
+%                Minh-Ngoc Tran (minh-ngoc.tran@sydney.edu.au) 
 %
-%   http://www.xxx.com
-%
-%   Version: 1.0
-%   LAST UPDATE: April, 2018
+% https://github.com/VBayesLab/deepGLM
+% 
+% Version: 1.0
+% LAST UPDATE: May, 2018
 
 clear
 clc

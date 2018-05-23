@@ -1,13 +1,14 @@
 % Examples demonstate how to use deepGLM function to fit data with continuos 
 % dependent variable
 %
-%   Copyright 2018 Minh-Ngoc Tran (minh-ngoc.tran@sydney.edu.au) and Nghia
-%   Nguyen (nghia.nguyen@sydney.edu.au)
+% Copyright 2018 
+%                Nghia Nguyen (nghia.nguyen@sydney.edu.au)
+%                Minh-Ngoc Tran (minh-ngoc.tran@sydney.edu.au) 
 %
-%   http://www.xxx.com
+% https://github.com/VBayesLab/deepGLM
 %
-%   Version: 1.0
-%   LAST UPDATE: April, 2018
+% Version: 1.0
+% LAST UPDATE: May, 2018
 
 clear
 clc
@@ -15,27 +16,26 @@ clc
 % load data
 % load('../Data/dataSimulationContinuous.mat')
 % load('../Data/dataSimulationContinuousEasy.mat')
-load('../Data/DirectMarketing.mat')
+% load('../Data/DirectMarketing.mat')
 % load('../Data/SchoolingDataBART.mat')
 % load('../Data/SchoolingDataDeepGLM.mat')
 % load('../Data/OnlineBART.mat')
 % load('../Data/HILDABart.mat')
-% load('../Data/abaloneBART.mat')
+load('../Data/abaloneBART.mat')
 
 %% Fit deepGLM model using default setting
 % By default, if 'distribution' option is not specified then deepGLMfit
 % will assign the response variables as 'normal'
-nn = [5,5];
+nn = [10,10];
 mdl = deepGLMfit(X,y,...  
-                 'Distribution','normal',...
                  'Network',nn,... 
-                 'Lrate',0.01,...           
-                 'Verbose',10,...             % Display training result each iteration
-                 'BatchSize',size(X,1),...   % Use entire training data as mini-batch
+                 'Lrate',0.008,...           
+                 'Verbose',1,...             % Display training result each iteration
+                 'BatchSize',1000,...        % Use entire training data as mini-batch
                  'MaxEpoch',10000,...
-                 'Patience',50,...           % Higher patience values could lead to overfitting
-                 'Seed',100,...
-                 'Intercept',true);
+                 'Patience',100,...          % Higher patience values could lead to overfitting
+                 'Seed',NaN,...
+                 'WindowSize',100);
              
 %% Plot training output
 figure
