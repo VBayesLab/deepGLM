@@ -17,8 +17,8 @@ clear
 clc
 
 % load data
-load('../Data/BikeSharingDeepGLM.mat')
-% load('../Data/abaloneBART.mat')
+% load('../Data/BikeSharingDeepGLM.mat')
+load('../Data/abalone.mat')
 
 
 %% Fit deepGLM model using default setting
