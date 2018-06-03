@@ -11,6 +11,7 @@ Nghia Nguyen (nghia.nguyen@sydney.edu.au) <br/>
 Minh-Ngoc Tran (minh-ngoc.tran@sydney.edu.au)
 
 ## Usage
+### For MATLAB Version
 To use the Toolbox, add the folder called "deepGLM" (with Subfolders) to the MATLAB path.
 
 The toolbox contains the following folders:
