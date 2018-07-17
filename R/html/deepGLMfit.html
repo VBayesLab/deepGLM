@@ -1,0 +1,317 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Train a deepGLM model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for deepGLMfit {deepglm}"><tr><td>deepGLMfit {deepglm}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Train a deepGLM model
+</h2>
+
+<h3>Usage</h3>
+
+<pre>
+deepGLMfit(X,y, Lrate=0.01, Network=c(10,10) , BatchSize=5000,
+           S=10, LRateFactor=10000, Momentum=0.6, Patience=100,
+           MaxEpoch = 100, Verbose=10, Distribution='normal',
+           WindowSize=100, Seed=NaN, Intercept=TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>X</code></td>
+<td>
+
+<p>Predictor variables X, specified as an n-by-p matrix, where n is the number of observations
+and p is the number of predictor variables. Each column of X represents one variable, and
+each row represents one observation.
+</p>
+<p>Data type: matrix | numerical
+</p>
+</td></tr>
+<tr valign="top"><td><code>y</code></td>
+<td>
+
+<p>Response variable y, specified as an n-by-1 vector, where n is the number of observations.
+Each entry in y is the response for the corresponding row of X.
+</p>
+<p>Data type: vector | numerical
+</p>
+</td></tr>
+<tr valign="top"><td><code>Lrate</code></td>
+<td>
+
+<p>The fix learning rate that is used for training. If the learning rate is too
+small, training will take a long time, but if it is too high, the training is
+likely to get stuck at a suboptimal result
+</p>
+<p>Data type: scalar | numerical
+</p>
+</td></tr>
+<tr valign="top"><td><code>Network</code></td>
+<td>
+
+<p>Neuron Network structure for deepGLM. In the current version,
+deepglm supports only 1 node for the output layer, users just need
+to provide a structure for hidden layers in a vector where each
+element in the vector is the number of nodes in the corresponding
+hidden layer. For example: <em>Network=c(10,10,10)</em> assigns
+deepGLM use 3 hidden layers with 10 nodes for each.
+</p>
+<p>Data type: vector | positive integer
+</p>
+</td></tr>
+<tr valign="top"><td><code>BatchSize</code></td>
+<td>
+
+<p>The size of the mini-batch used for each training iteration. For
+deepGLM, batch size should be a large number (e.g. 5000, 10000)
+compared to batch size in deep learning literature (e.g. 128, 256)
+Must be a positive integer equal or smaller than number of
+observations of training data.
+</p>
+<p>Data type single | positive integer
+</p>
+</td></tr>
+<tr valign="top"><td><code>S</code></td>
+<td>
+
+<p>The number of samples needed for Monte Carlo approximation of
+gradient of lower bound. Must be an positive integer
+</p>
+<p>Data type: scalar | positive integer
+</p>
+</td></tr>
+<tr valign="top"><td><code>LRateFactor</code></td>
+<td>
+
+<p>Down-scaling factor that is applied to the learning rate every time a certain number of
+iterations has passed. Must be a positive integer. For example, <em>LrateFactor=100</em> means that after the first 100 iterations,learning rate will be multiplied with 100/t
+in each iteration, where t is the current number of iterations
+</p>
+</td></tr>
+<tr valign="top"><td><code>Momentum</code></td>
+<td>
+
+<p>Momentum weight for stochastic gradient ascend. The momentum determines the contribution of the gradient step from the previous iteration to the current iteration of training. It must be a value
+between 0 and 1, where 0 will give no contribution from the previous step, and 1 will give a maximal contribution from the previous step. Must be between 0 and 1
+</p>
+<p>Data type: scalar | numeric (0 to 1)
+</p>
+</td></tr>
+<tr valign="top"><td><code>Patience</code></td>
+<td>
+
+<p>Number of consecutive times that the validation loss is allowed to be larger than or equal to the previously smallest loss before network training is stopped, used as an early stopping criterion. Must be a positive integer.
+</p>
+<p>Data type: scalar | positive integer
+</p>
+</td></tr>
+<tr valign="top"><td><code>MaxEpoch</code></td>
+<td>
+
+<p>The maximum number of epochs that will be used for training. An epoch is defined as the number of iterations needed for optimization algorithm to scan entire training data. Must be a positive integer.
+</p>
+<p>Data type: scalar | positive integer
+</p>
+</td></tr>
+<tr valign="top"><td><code>Verbose</code></td>
+<td>
+
+<p>Number of iterations that information on training progress will be printed to the command window each time. Set to 0 to disable this options.
+</p>
+<p>Data type: scalar | integer
+</p>
+</td></tr>
+<tr valign="top"><td><code>Distribution</code></td>
+<td>
+
+<p>Name of the distribution of the response, chosen from the following:<br />
+<em>'normal'</em> - Normal distribution (for continuous response)<br />
+<em>'binomial'</em> - Binomial distribution (for binary response)<br />
+<em>'poisson'</em> - Poisson distribution (for counting response)
+</p>
+<p>Data type: string
+</p>
+</td></tr>
+<tr valign="top"><td><code>WindowSize</code></td>
+<td>
+
+<p>Size of moving average window that used to smooth the VB lowerbound. Must be an positive integer
+</p>
+<p>Data type: scalar | positive integer
+</p>
+</td></tr>
+<tr valign="top"><td><code>Seed</code></td>
+<td>
+
+<p>Seeds the random number generator using the nonnegative integer. Must be a nonnegative integer.
+</p>
+<p>Data type: scalar | nonnegative integer
+</p>
+</td></tr>
+<tr valign="top"><td><code>Intercept</code></td>
+<td>
+
+<p>Set true (default) to add a column of 1 to predictor observation X matrix (play the role as
+intercept). If the data have already included the first '1' column, set 'Intercept' to false.
+</p>
+<p>Data type: logical
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>deepGLMfit returns a list including all input setting by users and output training information with a combination of following members:
+</p>
+<table summary="R valueblock">
+<tr valign="top"><td><code>out.weights</code></td>
+<td>
+
+<p>Estimated Mean of weights of Deep Neuron Network from input layer to the last hidden layer. This       will be used to quickly doing point estimation for new data
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.beta</code></td>
+<td>
+
+<p>Estimated Mean of weights from the last hidden layer to output layer. This will be used to quickly     doing point estimation for new data.
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.shrinkage</code></td>
+<td>
+
+<p>Matrix storing estimated values of group Lasso coefficients during training phase, used for            variable selection.
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.lb</code></td>
+<td>
+
+<p>A vector storing values of VB lowerbound calculated in each iteration. In the training algorithm,      the convergence of lowerbound is used as early stopping rule.
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.lbBar</code></td>
+<td>
+
+<p>A vector storing values of VB lowerbound after smoothed by a moving average window
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.vbMU</code></td>
+<td>
+
+<p>Estimated Mean of Variational Distribution. Used to do predictio interval estimation for new data
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.vbSIGMA</code></td>
+<td>
+
+<p>Estimated Covariance matrix of Variational Distribution. Used to do prediction interval estimation     for new data.
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.b</code></td>
+<td>
+
+<p>Estimated factor loading vector. Used to calculate the estimated Covariance matrix of Variational      Distribution vbSIGMA
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.c</code></td>
+<td>
+
+<p>Estimated vector of idiosyncratic noise standard deviation. Used to calculate the estimated            Covariance matrix of Variational Distribution vbSIGMA
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.sigma2Alpha</code></td>
+<td>
+
+<p>Estimated shape parameter of Invert Gamma Variation Approximation for variance of noise
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.sigma2Beta</code></td>
+<td>
+
+<p>Estimated scale parameter of Invert Gamma Variation Approximation for variance of noise
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.sigma2Mean</code></td>
+<td>
+
+<p>Estimated mean of covariance of noise in each iteration during training phase
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.nparams</code></td>
+<td>
+
+<p>Total number of parameters in deepGLM have to be trained.
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.indexTrack</code></td>
+<td>
+
+<p>A vector to keep track the indexes of all weights in Deep Neuron Network. Used to reconstruct Deep     Neuron Network from vbMU when doing prediction on new data
+</p>
+</td></tr>
+<tr valign="top"><td><code>out.CPU</code></td>
+<td>
+
+<p>Total amount of training time (in second)
+</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Nghia Nguyen: <a href="mailto:nghia.nguyen@sydney.edu.au">nghia.nguyen@sydney.edu.au</a><br />
+Minh-Ngoc Tran: <a href="mailto:minh-ngoc.tran@sydney.edu.au">minh-ngoc.tran@sydney.edu.au</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Minh-Ngoc Tran,Nghia Nguyen, David J. Nott and Robert Kohn (2018)  Bayesian Deep Net GLM and GLMM. arXiv:1805.10157 <a href="https://arxiv.org/abs/1805.10157">https://arxiv.org/abs/1805.10157</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="deepGLMpredict.html">deepGLMpredict</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Train a deepGLM model on a simulation data (with continuous outcome)
+## Create a simulation data with continuous outcomes
+sigma &lt;- 1              # Variance of noise
+n &lt;- 10000              # Number of observations
+N &lt;- 10                 # Number of covariates
+X &lt;- matrix(runif(n*N),n,N)     # Design matrix
+# Use only 5 covariates to generate data
+y &lt;- 5 + 3*(X[,1] + 2*X[,2])^2 + 5*X[,3]*X[,4] + 2*X[,5] + sigma*runif(n)
+ntest &lt;- 2000           # Number of observation used for testing
+Xtest &lt;- X[1:ntest,]    # Extract data for test
+ytest &lt;- y[1:ntest]     # True value of test observations
+X &lt;- X[(ntest+1):n,]    # Observation for training
+y &lt;- y[(ntest+1):n]     # True values of training observations
+
+
+## Fit simulation training data with deepGLMfit
+deepGLMout &lt;-deepGLMfit(X, y, Network=c(5,5), Seed=100, Verbose=1, MaxEpoch=2000)
+
+## Make point prediction on test data using deepGLMpredict
+print('----------------Prediction---------------')
+Pred &lt;- deepGLMpredict(deepGLMout,Xtest,y=ytest)
+cat('PPS on test set using deepGLM is: ',Pred$pps,'\n')
+cat('MSE on test set using deepGLM is: ',Pred$mse,'\n')
+
+## Make prediction on test data with prediction interval
+Pred1 &lt;- deepGLMpredict(deepGLMout,Xtest,y=ytest,Interval=1,Nsample=1000)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>deepglm</em> version 0.0.0.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

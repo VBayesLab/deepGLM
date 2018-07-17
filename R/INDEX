@@ -1,0 +1,2 @@
+deepGLMfit              Train a deepGLM model
+deepGLMpredict          Predict response of deepGLM model
