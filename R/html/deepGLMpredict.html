@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Predict response of deepGLM model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for deepGLMpredict {deepglm}"><tr><td>deepGLMpredict {deepglm}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Predict response of deepGLM model
+</h2>
+
+<h3>Usage</h3>
+
+<pre>
+deepGLMpredict(mdl, X, y=NULL, Interval=0, Nsample=1000, Intercept=TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mdl</code></td>
+<td>
+
+<p>Trained deepGLM model which is the output from <code><a href="deepGLMfit.html">deepGLMfit</a></code> function.
+</p>
+</td></tr>
+<tr valign="top"><td><code>X</code></td>
+<td>
+
+<p>Predictor variables X, specified as an n-by-p matrix, where n is the number of observations
+and p is the number of predictor variables. Each column of X represents one variable, and
+each row represents one observation.
+</p>
+<p>Data type: matrix | numerical
+</p>
+</td></tr>
+<tr valign="top"><td><code>y</code></td>
+<td>
+
+<p>Specify column of test responses. If this option is specified with true response
+column of new observations, <code><a href="deepGLMpredict.html">deepGLMpredict</a></code> will return prediction scores
+(PPS, MSE or Classification Rate) using true response column vector y
+</p>
+<p>Data type: vector | numerical
+</p>
+</td></tr>
+<tr valign="top"><td><code>Interval</code></td>
+<td>
+
+<p>Return prediction interval estimation for observations in test data X. By default, this predictive interval capability is disable (<em>Interval=0</em>). For example, <em>Interval=1</em> will return one standard deviation
+predictive interval for new observations.
+</p>
+<p>Data type: scalar | positive numerical
+</p>
+</td></tr>
+<tr valign="top"><td><code>Nsample</code></td>
+<td>
+
+<p>Number of samples generated from posterior distribution of model
+parameters used to make prediction interval estimation for test data. Must be
+a positive integer
+</p>
+<p>Data type: scalar | positive integer
+</p>
+</td></tr>
+<tr valign="top"><td><code>Intercept</code></td>
+<td>
+
+<p>Set TRUE (default) to add a column of 1 to predictor observation X
+matrix (play the role as intercept). If the data have already included
+the first '1' column, set <em>Intercept=FALSE</em>
+</p>
+<p>Data type: logical
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p><code><a href="deepGLMpredict.html">deepGLMpredict</a></code> returns a list of prediction results on un-seen data with the following members:
+</p>
+<table summary="R valueblock">
+<tr valign="top"><td><code>yhat</code></td>
+<td>
+
+<p>Vector of point estimation for X. The length of yhat is equal to the number of observations of X.
+</p>
+</td></tr>
+<tr valign="top"><td><code>yNN</code></td>
+<td>
+
+<p>Vector of output values when pass X through trained Deep Neuron Network. The length of yNN is the              number of observation in X. If responses are normal, yNN is equal to yhat
+</p>
+</td></tr>
+<tr valign="top"><td><code>yProb</code></td>
+<td>
+
+<p>Vector of output values when pass X through trained Deep Neuron Network. The length of yNN is the              number of observation in X. If responses are normal, yNN is equal to yhat
+</p>
+</td></tr>
+<tr valign="top"><td><code>pps</code></td>
+<td>
+
+<p>Partial Predictive Score loss of trained deepGLM on X. This is only available when ytest is specified.
+</p>
+</td></tr>
+<tr valign="top"><td><code>mse</code></td>
+<td>
+
+<p>Mean Square Error of trained deepGLM on X. This is only available for Normal or Poisson responses and          ytest is specified
+</p>
+</td></tr>
+<tr valign="top"><td><code>accuracy</code></td>
+<td>
+
+<p>Classification rate of trained deepGLM classifier on X. This is only available for binary responses and        ytest is specified.
+</p>
+</td></tr>
+<tr valign="top"><td><code>interval</code></td>
+<td>
+
+<p>Prediction interval estimation of trained deepGLM on Xtest. <em>interval</em> is a two columns matrix where each row     is an prediction interval of the corresponding observation of X. This is only available when 'Interval'     option is specified with a non-zero value.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Nghia Nguyen: <a href="mailto:nghia.nguyen@sydney.edu.au">nghia.nguyen@sydney.edu.au</a><br />
+Minh-Ngoc Tran: <a href="mailto:minh-ngoc.tran@sydney.edu.au">minh-ngoc.tran@sydney.edu.au</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Minh-Ngoc Tran,Nghia Nguyen, David J. Nott and Robert Kohn (2018)  Bayesian Deep Net GLM and GLMM. arXiv:1805.10157 <a href="https://arxiv.org/abs/1805.10157">https://arxiv.org/abs/1805.10157</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="deepGLMfit.html">deepGLMfit</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Train and make prediction with deepGLM model on a simulation data (with continuous outcome)
+## Create a simulation data with continuous outcomes
+sigma &lt;- 1              # Variance of noise
+n &lt;- 10000              # Number of observations
+N &lt;- 10                 # Number of covariates
+X &lt;- matrix(runif(n*N),n,N)     # Design matrix
+# Use only 5 covariates to generate data
+y &lt;- 5 + 3*(X[,1] + 2*X[,2])^2 + 5*X[,3]*X[,4] + 2*X[,5] + sigma*runif(n)
+ntest &lt;- 2000           # Number of observation used for testing
+Xtest &lt;- X[1:ntest,]    # Extract data for test
+ytest &lt;- y[1:ntest]     # True value of test observations
+X &lt;- X[(ntest+1):n,]    # Observation for training
+y &lt;- y[(ntest+1):n]     # True values of training observations
+
+
+## Fit simulation training data with deepGLMfit
+deepGLMout &lt;-deepGLMfit(X, y, Network=c(5,5), Seed=100, Verbose=1, MaxEpoch=2000)
+
+## Make point prediction on test data using deepGLMpredict
+print('----------------Prediction---------------')
+Pred &lt;- deepGLMpredict(deepGLMout,Xtest,y=ytest)
+cat('PPS on test set using deepGLM is: ',Pred$pps,'\n')
+cat('MSE on test set using deepGLM is: ',Pred$mse,'\n')
+
+## Make prediction on test data with prediction interval
+Pred1 &lt;- deepGLMpredict(deepGLMout,Xtest,y=ytest,Interval=1,Nsample=1000)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>deepglm</em> version 0.0.0.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>
