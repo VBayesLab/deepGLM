@@ -1,5 +1,5 @@
 # DeepGLM
-Version 0.1.0<br/>
+Version 0.0.0.9000<br/>
 
 ## Introduction
 DeepGLM is a flexible model that use Deep Feedforward Neuron Network as the basis function for Generalized Linear Model. DeepGLM is designed to work with Cross-Sectional Dataset such as real estate data, cencus data, etc. <br/>
