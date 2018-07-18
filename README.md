@@ -33,6 +33,7 @@ where *D:\deepglm_0.0.0.9000.zip* is the package directory in local machine
 
 *deepglm* provides two function to train a deepGLM model on training data (***deepGLMfit***) and to make prediction using a trained deepGLM model on unseen data (***deepGLMpredict***)
 
+
 ### Python Version
 Coming soon...
 
