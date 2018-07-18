@@ -11,6 +11,7 @@ Nghia Nguyen (nghia.nguyen@sydney.edu.au) <br/>
 Minh-Ngoc Tran (minh-ngoc.tran@sydney.edu.au)
 
 ## Usage
+Users can choose either Matlab, R or Python version to train and make prediction with deepGLM.
 ### MATLAB Version
 To use the Toolbox, add the folder called "deepGLM" (with Subfolders) to the MATLAB path.
 
@@ -22,8 +23,14 @@ The toolbox contains the following folders:
 - deepGLM: all the functions of the toolbox all here. This is the folder you must add to the MATLAB path.
 
 ### R Version
+Install *deepglm* package for R:
+- Clone the directory or directly download the zip file **deepglm_0.0.0.9000.zip** inside *deepGLM/R/* subdirectory on github. 
+- In Rstudio, run the command: 
+**install.packages("D:\\deepglm_0.0.0.9000.zip", repos = NULL, type="source")**
+where *D:\deepglm_0.0.0.9000.zip* is the package directory in local machine
 
-
+Use *deepglm* package:
+- *deepglm* provides two function to train a deepGLM model on training data (***deepGLMfit***) and to make prediction using a trained deepGLM model on unseen data (***deepGLMpredict***)
 
 ### Python Version
 Coming soon...
