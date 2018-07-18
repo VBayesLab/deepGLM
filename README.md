@@ -25,8 +25,8 @@ The toolbox contains the following folders:
 ### R Version
 Install *deepglm* package for R:
 - Clone the directory or directly download the zip file **deepglm_0.0.0.9000.zip** inside *deepGLM/R/* subdirectory on github. 
-- In Rstudio, run the command: 
-**install.packages("D:\\deepglm_0.0.0.9000.zip", repos = NULL, type="source")**
+- In Rstudio, run the command:<br/> 
+**install.packages("D:\\deepglm_0.0.0.9000.zip", repos = NULL, type="source")** <br/>
 where *D:\deepglm_0.0.0.9000.zip* is the package directory in local machine
 
 Use *deepglm* package:
