@@ -31,9 +31,9 @@ where *D:\deepglm_0.0.0.9000.zip* is the package directory in local machine
 - To use the package, run the command:<br/> 
 **library(deepglm)**
 
-*deepglm* provides two function to train a deepGLM model on training data (***deepGLMfit***) and to make prediction using a trained deepGLM model on unseen data (***deepGLMpredict***). In Studio, use command: **?deepGLMfit** and **?deepGLMpredict** to read the documentation for two functions
+*deepglm* provides two function to train a deepGLM model on training data (*deepGLMfit*) and to make prediction using a trained deepGLM model on unseen data (*deepGLMpredict*). In Studio, use command: **?deepGLMfit** and **?deepGLMpredict** to read the documentation for two functions
 
-Use command **example(deepGLMfit)** to run the example showing how to run ***deepGLMpredict*** and ***deepGLMpredict*** on a simulation data
+Use command **example(deepGLMfit)** to run the example showing how to run *deepGLMpredict* and *deepGLMpredict* on a simulation data
 
 
 ### Python Version
