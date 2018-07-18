@@ -35,6 +35,7 @@ where *D:\deepglm_0.0.0.9000.zip* is the package directory in local machine
 
 Use command **example(deepGLMfit)** to run the example showing how to run *deepGLMpredict* and *deepGLMpredict* on a simulation data
 
+User can run addition example using script in *demos* folder in the installation directory. For example, the installation directory for deepglm in my Window machine is: *D:\Program Files\R\R-3.4.3\R-3.4.3\library\deepglm*
 
 ### Python Version
 Coming soon...
