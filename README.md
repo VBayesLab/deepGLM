@@ -28,10 +28,10 @@ Install *deepglm* package for R:
 - In Rstudio, run the command:<br/> 
 **install.packages("D:\\deepglm_0.0.0.9000.zip", repos = NULL, type="source")** <br/>
 where *D:\deepglm_0.0.0.9000.zip* is the package directory in local machine
-- To use the package:<br/> 
+- To use the package, run the command:<br/> 
 **library(deepglm)**
 
-Use *deepglm* package:
+Use *deepglm* package
 - *deepglm* provides two function to train a deepGLM model on training data (***deepGLMfit***) and to make prediction using a trained deepGLM model on unseen data (***deepGLMpredict***)
 
 ### Python Version
