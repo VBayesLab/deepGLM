@@ -38,7 +38,7 @@ Use command **example(deepGLMfit)** to run the example showing how to run *deepG
 User can run addition examples using scripts in *demos* folder in the installation directory. For example, the installation directory for *deepglm* package in my Window machine is: *D:\Program Files\R\R-3.4.3\R-3.4.3\library\deepglm*
 
 ### Python Version
-Coming soon...
+Download the file **deepGLM.pyc** to your project folder.
 
 ## How to cite
 Please, cite the toolbox as:
