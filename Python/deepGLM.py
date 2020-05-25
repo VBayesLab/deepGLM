@@ -5,7 +5,7 @@ from scipy.special import gammaln
 from scipy.special import psi
 from numpy.linalg import det, norm
 from numpy import log, sum, power, outer, dot, sqrt, arange, diag, \
-                    concatenate, ones, zeros, mean, argsort, std
+                    concatenate, ones, zeros, mean, argsort, std, exp
 from numpy.random import permutation, multivariate_normal, gamma, normal
 import time
 
@@ -215,6 +215,7 @@ def nnActivation(z,func):
     elif func == 'ReLU':
         out = np.maximum(z, 0)
     elif func == 'LeakyReLU':
+        alpha = 0.01 # Hard c
         out = np.maximum(0,z)+ alpha*np.min(0,z)
     else:
         raise('activation function must be either Linear, Sigmoid, Tanh, RelU, LeakyReLU')
@@ -273,7 +274,7 @@ def deepGLMpredictLoss(X,y,W_seq,beta,distr,sigma2):
         mcr = np.mean(np.abs(y-y_pred))        # Miss-classification rate
         out2 = 1 - mcr                   # Report output in classification rate   
     elif distr == 'poisson':
-        pps = np.mean(-p.multiply(y, nnet_output) + np.exp(nnet_output))
+        pps = np.mean(-np.multiply(y, nnet_output) + np.exp(nnet_output))
         mse = np.mean(np.power(y-np.exp(nnet_output),2))
         out2 = mse
         
@@ -390,18 +391,19 @@ def nnActivationGrad(z,func):
 
     if func == 'Linear':
         out = ones(z.shape)
-    elif func == 'Sigmoid':
-        temp = activation(z,text)
-        out = temp*(1-temp)
-    elif func == 'Tanh':
-        temp = activation(z,text)
-        out = 1 - power(temp,2)
+    # elif func == 'Sigmoid':
+    #     temp = activation(z,text)
+    #     out = temp*(1-temp)
+    # elif func == 'Tanh':
+    #     temp = activation(z,text)
+    #     out = 1 - power(temp,2)
     elif func == 'ReLU':
         out = z>0
     elif 'LeakyReLU':
         if z > 0:
             out = 1
         else:
+            alpha = 0.01 # Hard c
             out = alpha
             
     return out
@@ -689,7 +691,7 @@ def deepGLMfit(X,y,
 #   LAST UPDATE: May, 2018
 
     # Initialize output structure with default setting
-    est = deepGLMout();
+    est = deepGLMout()
 
     # Check errors input arguments
     if y.shape[0] != X.shape[0]:
@@ -751,45 +753,42 @@ def deepGLMfit(X,y,
         raise ValueError('Batch size must be an positive integer smaller than number of observations in training data')
 
     ## Store training settings
-    est.isIsotropic = isotropic;
-    est.S = S;
-    est.batchsize = batchsize;
-    est.lrate = lrate;
-    est.initialize = initialize;
-    est.ncore = ncore;
-    est.epoch = epoch;
-    est.tau = tau;
-    est.patience = patience;
-    est.network = np.floor(network);
-    est.dist = dist;
-    est.seed = seed;
-    est.c = c;
-    est.cutoff = cutoff;
-    est.bvar = bvar;
-    est.nval = nval;
-    est.icept = icept;
-    est.momentum = momentum;
-    est.verbose = verbose;
-    est.quasiMC = quasiMC;
-    est.muTau = muTau;
-    est.lowerbound = lowerbound;
-    est.windowSize = windowSize;
-    est.monitor = monitor;
-    est.data.Xval = Xval;
-    est.data.yval = yval;   
+    est.isIsotropic = isotropic
+    est.S = S
+    est.batchsize = batchsize
+    est.lrate = lrate
+    est.initialize = initialize
+    est.ncore = ncore
+    est.epoch = epoch
+    est.tau = tau
+    est.patience = patience
+    est.network = np.floor(network)
+    est.dist = dist
+    est.seed = seed
+    est.c = c
+    est.cutoff = cutoff
+    est.bvar = bvar
+    est.nval = nval
+    est.icept = icept
+    est.momentum = momentum
+    est.verbose = verbose
+    est.quasiMC = quasiMC
+    est.muTau = muTau
+    est.lowerbound = lowerbound
+    est.windowSize = windowSize
+    est.monitor = monitor
+    est.data.Xval = Xval
+    est.data.yval = yval
     
     # Check if inputs are valid
-    checkInput(est);
+    checkInput(est)
     
-    ## Run different models based on different types of distribution families
-    if monitor:          # If user want to look at training progress
-        est = DeepGLMTrainMonitor(X,y,est);
-    else:                # Run training using Matlab scripts
-        tic = time.time()
-        est = deepGLMTrain(X,y,est);
-        CPU = time.time() - tic
-        print('Training time: %ss' % CPU)
-        est.out.CPU = CPU      # Save training time
+    # Run training using Matlab scripts
+    tic = time.time()
+    est = deepGLMTrain(X,y,est);
+    CPU = time.time() - tic
+    print('Training time: %ss' % CPU)
+    est.out.CPU = CPU      # Save training time
         
     return est
 
@@ -888,13 +887,13 @@ def vbGradientLogLB(S, d_theta, mu, L, index_track, n_units, p,
                             -0.5*mean_sigma2_inverse*sum(power(y-yNN,2))*datasize/batchsize\
                             +const
             elif distr == 'binomial':
-                lb_iter[s] = constMean\
-                            +sum(y*yNN - log(1+exp(yNN)))*datasize/batchsize\
-                            +const
+                lb_iter[s] = constMean \
+                             + sum(y * yNN - log(1 + np.exp(yNN))) * datasize / batchsize \
+                             + const
             else:
-                lb_iter[s] = constMean\
-                            +sum(y*yNN - exp(yNN))*datasize/batchsize\
-                            +const
+                lb_iter[s] = constMean \
+                             + sum(y * yNN - np.exp(yNN)) * datasize / batchsize \
+                             + const
     #   ----------------------------------------------------------------------
     ##########################################################################
     grad_lb = toVector(grad_g_lik_store.mean(axis=0))
@@ -1328,12 +1327,12 @@ def deepGLMTrain(X_train,y_train,est):
         print('MSE best: %s' % min(MSE_DL))
 
     ## ----------------------Store training output-----------------------------
-    lambda_ = lambda_best;
+    lambda_ = lambda_best
     mu = toVector(lambda_[:d_theta,0])
     b = toVector(lambda_[d_theta:2*d_theta,0])
     c = toVector(lambda_[2*d_theta:])
     if isotropic:              # For isotropic structure
-        SIGMA = dot(b,b.transpose()) + c**2*eyes(d_theta)
+        SIGMA = dot(b,b.transpose()) + c**2*np.eye(d_theta)
     else:
         SIGMA = dot(b,b.transpose()) + diag(power(c,2))
 
@@ -1347,35 +1346,35 @@ def deepGLMTrain(X_train,y_train,est):
     beta = mu[d_w:d_w+d_beta]
 
     # Store output in a struct
-    est.out.weights = W_seq; 
-    est.out.beta = beta;
-    est.out.shrinkage = shrinkage_gamma_seq;
-    est.out.iteration = iter;
-    est.out.vbMU = mu.flatten();            # Mean of variational distribution of weights
-    est.out.b = b;
-    est.out.c = c;
-    est.out.vbSIGMA = SIGMA;      # Covariance matrix of variational distribution 
+    est.out.weights = W_seq
+    est.out.beta = beta
+    est.out.shrinkage = shrinkage_gamma_seq
+    est.out.iteration = iter
+    est.out.vbMU = mu.flatten()            # Mean of variational distribution of weights
+    est.out.b = b
+    est.out.c = c
+    est.out.vbSIGMA = SIGMA      # Covariance matrix of variational distribution
                                   # of weights
-    est.out.nparams = d_theta;    # Number of parameters     
-    est.out.indexTrack = index_track;
-    est.out.muTau = mu_tau;
+    est.out.nparams = d_theta    # Number of parameters
+    est.out.indexTrack = index_track
+    est.out.muTau = mu_tau
 
     if distr=='normal':
-        est.out.sigma2Alpha = alpha_sigma2;
-        est.out.sigma2Beta = beta_sigma2;
+        est.out.sigma2Alpha = alpha_sigma2
+        est.out.sigma2Beta = beta_sigma2
         est.out.sigma2Mean = mean_sigma2_save[-1]
-        est.out.sigma2MeanIter = mean_sigma2_save;
+        est.out.sigma2MeanIter = mean_sigma2_save
 
     if (lbFlag):
-        est.out.lbBar = lb_bar[1:];
-        est.out.lb = lb;
+        est.out.lbBar = lb_bar[1:]
+        est.out.lb = lb
     else:
         if (distr == 'binomial'):
-            est.out.accuracy = MSE_DL;
+            est.out.accuracy = MSE_DL
         else:
-            est.out.mse = MSE_DL;
+            est.out.mse = MSE_DL
 
-        est.out.pps = PPS_DL;
+        est.out.pps = PPS_DL
             
             
     return est
@@ -1407,7 +1406,7 @@ def plotShrinkage(ShrinkageCoef,opt):
 
     # Define default settings
     if TextTitle == '':
-        TextTitle = 'Shrinkage Coefficients';
+        TextTitle = 'Shrinkage Coefficients'
     
     if labelX == '':
         labelX = 'Iteration'
@@ -1786,18 +1785,18 @@ def deepGLMpredict(mdl,X_,
 
     elif distr == 'binomial':
         out.yNN = nnet_output
-        out.yProb = exp(nnet_output)/(1 + exp(nnet_output))
+        out.yProb = np.exp(nnet_output) / (1 + np.exp(nnet_output))
         y_pred = (nnet_output>0).astype('double')   # Prediction for binary response
         out.yhat = y_pred
         # If ytest if provided, then calculate pps and mse
         if len(y)!=0:
-            pps = mean(-y*nnet_output + log(1 + exp(nnet_output)))
+            pps = mean(-y * nnet_output + log(1 + np.exp(nnet_output)))
             cr = mean(y==y_pred)    # Miss-classification rate
             out.pps = pps
             out.accuracy = cr
     elif distr == 'poisson':
         out.yNN = nnet_output
-        y_pred = exp(nnet_output)    # Prediction for poisson response
+        y_pred = np.exp(nnet_output)    # Prediction for poisson response
         out.yhat = y_pred
         if len(y)!=0:
             pps = mean(-y*nnet_output + exp(nnet_output))
