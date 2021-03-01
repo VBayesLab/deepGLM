@@ -43,4 +43,4 @@ Download the file **deepGLM.pyc** to your project folder.
 ## How to cite
 Please, cite the toolbox as:
 
-Tran, M.-N., Nguyen, N., Kohn, R., and Nott, D. (2018) Bayesian Deep Net GLM and GLMM. *arXiv preprint arXiv:1805.10157*
+Tran, M.-N., Nguyen, N., Kohn, R., and Nott, D. (2019) Bayesian Deep Net GLM and GLMM. Journal of Computational and Graphical Statistics, 29(1):97-113
