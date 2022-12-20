@@ -21,7 +21,7 @@ clc
 % load('../Data/SchoolingDataDeepGLM.mat')
 % load('../Data/OnlineBART.mat')
 % load('../Data/HILDABart.mat')
-load('../Data/abaloneBART.mat')
+load('../Data/abalone.mat')
 
 %% Fit deepGLM model using default setting
 % By default, if 'distribution' option is not specified then deepGLMfit
